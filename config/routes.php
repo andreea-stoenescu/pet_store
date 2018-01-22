@@ -42,8 +42,9 @@ use Cake\Routing\Route\DashedRoute;
  *
  */
 Router::defaultRouteClass(DashedRoute::class);
-
+Router::extensions(['json', 'xml']);
 Router::scope('/', function (RouteBuilder $routes) {
+    $routes->resources('Pets');
     /**
      * Here, we are connecting '/' (base path) to a controller called 'Pages',
      * its action called 'display', and we pass a param to select the view file
