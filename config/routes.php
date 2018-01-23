@@ -46,6 +46,9 @@ Router::defaultRouteClass(DashedRoute::class);
 Router::prefix('api', function ($routes) {
     $routes->extensions(['json', 'xml']);
     $routes->resources('Pets');
+    $routes->resources('Users');
+    Router::connect('/api/users/register', ['controller' => 'Users', 'action' => 'add', 'prefix' => 'api']);
+    $routes->fallbacks('InflectedRoute');
 });
 
 Router::scope('/', function (RouteBuilder $routes) {
