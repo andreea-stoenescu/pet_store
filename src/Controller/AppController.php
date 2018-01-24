@@ -6,7 +6,10 @@ use Cake\Controller\Controller;
 class AppController extends Controller {
     
     use \Crud\Controller\ControllerTrait;
-    
+    public function initialize()
+    {
+        $this->loadComponent('Flash');
+    }
     public $components = [
         'RequestHandler',
         'Crud.Crud' => [

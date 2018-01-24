@@ -14,8 +14,9 @@ class UsersController extends AppController
         $this->Auth->allow(['add', 'token']);
     }
     
-    public function register()
+    public function add()
     {
+        //$this->request->allowMethod('ajax');
         $this->Crud->on('afterSave', function(Event $event) {
             if ($event->subject->created) {
                 $this->set('data', [
@@ -23,7 +24,7 @@ class UsersController extends AppController
                     'token' => JWT::encode(
                         [
                             'sub' => $event->subject->entity->id,
-                            'exp' =>  time() + 604800
+                            'exp' =>  time() + 604800 //now + a week
                         ],
                     Security::salt())
                 ]);
@@ -31,5 +32,24 @@ class UsersController extends AppController
             }
         });
         return $this->Crud->execute();
+    }
+    
+    public function token()
+    {
+        $user = $this->Auth->identify();
+        if (!$user) {
+            throw new UnauthorizedException('Invalid username or password');
+        }
+        $this->set([
+            'success' => true,
+            'data' => [
+                'token' => JWT::encode([
+                    'sub' => $user['id'],
+                    'exp' =>  time() + 604800
+                ],
+                Security::salt())
+            ],
+            '_serialize' => ['success', 'data']
+        ]);
     }
 }
